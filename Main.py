@@ -21,28 +21,30 @@ class Menu(ttk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        # creates widgets
+        # Creates widgets
         self.open_button = tk.Button(self, text="Open Folder", font=("Times New Roman", 10), command=self.open_folder_dialog)
         self.listbox = tk.Listbox(self, width=50)
         self.submit_button = tk.Button(self, text="Open Checkbook", font=("Times New Roman",10), command=self.listboxSelection)
         self.NewFile_button = tk.Button(self, text="Make New Checkbook", font=("Times New Roman",10))
         
-        # creates grid
+        # Creates grid
         self.columnconfigure((0,1,2,3), weight = 1, uniform = "a")
         self.rowconfigure((0,1,2,3,4), weight = 1, uniform = "a")
 
-        # place widgets
+        # Place widgets
         self.open_button.grid(row = 0, column = 0, columnspan = 4)
         self.listbox.grid(row = 1, column = 0, columnspan = 4, rowspan = 3)
         self.submit_button.grid(row = 4, column = 0, columnspan = 2)
         self.NewFile_button.grid(row = 4, column = 2, columnspan = 2)
     
     def open_folder_dialog(self):
+        # Gets the file path for the save states
         folder_path = filedialog.askdirectory(title="Select a Folder")
         if folder_path:
             self.display_folder_contents(folder_path)
 
     def display_folder_contents(self, folder_path):
+        # Checks the files in the path and displays them
         try:
             folder_contents = os.listdir(folder_path)
             self.listbox.delete(0, tk.END)  # Clear the current list
@@ -58,9 +60,11 @@ class Menu(ttk.Frame):
         password_window = tk.Toplevel()
 
     def listboxSelection(self, event):
+        # Allows for a file to be selected and moved to the next part
         widget = event.widget
         selection=widget.curselection()
         picked = widget.get(selection[0])
+        
         #Open Checkbook with selected file here
         self.openBox_Password(self, picked)
 
