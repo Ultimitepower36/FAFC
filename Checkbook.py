@@ -18,7 +18,7 @@ class Checkbook_Window(tk.Tk):
 
         # widgets
         self.menu = Core_Window(self)
-        self.check = ListFrame(self, data , 50)
+        self.check = ListFrame(self, data , 25)
 
         # run
         self.mainloop()
@@ -71,7 +71,7 @@ class Core_Window(ttk.Frame):
 class ListFrame(ttk.Frame):
     def __init__(self, parent, text_data, item_height):
         super().__init__(master = parent)
-        self.place(x=0, y=100, relwidth=1, relheight=0.75)
+        self.place(x=0, y=90, relwidth=1, relheight=0.78)
 
         self.text_data = text_data
         self.item_number = len(text_data)
@@ -114,9 +114,9 @@ class ListFrame(ttk.Frame):
         frame.columnconfigure((0,1,2,3,4,5,6,7), weight = 1, uniform='a')
 
         #widgets
-        ttk.Label(frame, text = f'{index}', width=111).grid(row=0, column=0)
-        ttk.Label(frame, text = f'{item[0]}', width=111).grid(row=0, column=1)
-        ttk.Entry(frame, text = f"{item[1]}", width=111).grid(row=0, column=2)
+        ttk.Label(frame, text = f'{index}', width=111, background = "white").grid(row=0, column=0)
+        ttk.Label(frame, text = f'{item[0]}', width=111, background = "white").grid(row=0, column=1)
+        ttk.Entry(frame, text = f"{item[1]}", width=111, background = "white").grid(row=0, column=2)
 
         return frame
 
