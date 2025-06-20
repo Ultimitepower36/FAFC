@@ -62,6 +62,8 @@ class Core_Window(ttk.Frame):
             print("file created")
             
         with open("savefile.txt", "a") as f:
+            f = open("savefile.txt", 'r+')
+            f.truncate(0)
             for series in data:
                 f.write(f"{series}\n")
         return
