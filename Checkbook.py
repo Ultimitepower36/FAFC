@@ -17,26 +17,26 @@ class Checkbook_Window(tk.Tk):
         data = [("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory")]
 
         # widgets
-        self.menu = Core_Window(self)
+        self.menu = Core_Window(self, data)
         self.check = ListFrame(self, data , 25)
 
         # run
         self.mainloop()
     
 class Core_Window(ttk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, data):
         super().__init__(parent)
         self.place(x=0, y=0, relwidth=1, relheight=0.3)
-        self.create_widgets()
+        self.create_widgets(data)
 
-    def create_widgets(self):
+    def create_widgets(self, data):
         # Setup information
-        xAxis = ["Flag", "Number", "Information", "Date", "Status", "Amount", "Deposit", "Balance"]
+        xAxis = ["Number", "Flag", "Information", "Date", "Status", "Amount", "Deposit", "Balance"]
         
         # buttons/labels
         FileName = tk.Label(self, text = "input", background = "white" )
         AddButton = tk.Button(self, text="Add Row", command = self.rowAdd)
-        SaveButton = tk.Button(self, text="Save", command = self.saveApp)
+        SaveButton = tk.Button(self, text="Save", command = self.saveApp(data))
 
         # Creates grid
         self.columnconfigure((0,1,2,3,4,5,6,7), weight = 1, uniform = "a")
@@ -53,8 +53,7 @@ class Core_Window(ttk.Frame):
     def rowAdd():
         
         return
-    def saveApp():
-        '''
+    def saveApp(self, data):
         try:
             f = open("savefile.txt", "x")
         except:
@@ -63,9 +62,8 @@ class Core_Window(ttk.Frame):
             print("file created")
             
         with open("savefile.txt", "a") as f:
-            for key, value in cells.items():
-                f.write(f"{key} : {value.get()}\n")
-        '''
+            for series in data:
+                f.write(f"{series}\n")
         return
 
 class ListFrame(ttk.Frame):
@@ -106,7 +104,7 @@ class ListFrame(ttk.Frame):
 
 
     def create_item(self, index, item):
-        frame = ttk.Frame(self.frame)
+        frame = tk.Frame(self.frame)
         index +=1
 
         # Grid layout
@@ -114,9 +112,12 @@ class ListFrame(ttk.Frame):
         frame.columnconfigure((0,1,2,3,4,5,6,7), weight = 1, uniform='a')
 
         #widgets
-        ttk.Label(frame, text = f'{index}', width=111, background = "white").grid(row=0, column=0)
-        ttk.Label(frame, text = f'{item[0]}', width=111, background = "white").grid(row=0, column=1)
-        ttk.Entry(frame, text = f"{item[1]}", width=111, background = "white").grid(row=0, column=2)
+        tk.Label(frame, text = f'{index}', width=111, background = "white").grid(row=0, column=0)
+        z=1
+        for entry in item:
+            var = tk.StringVar(value=entry)
+            tk.Entry(frame, textvariable=var, width=111, background = "white").grid(row=0, column=z)
+            z+=1
 
         return frame
 
@@ -124,61 +125,4 @@ class ListFrame(ttk.Frame):
 
 title = "F.A.F.C"
 Checkbook_Window(title)
-
-'''
-setting = 12
-xAxis = ["Flag", "Number", "Information", "Date", "Status", "Amount", "Deposit", "Balance"]
-yAxis = range(0,setting)
-
-cells = {}
-
-title = "FAFC"
-mainwindow.title(title)
-
-for y in yAxis:
-    label = Label(mainwindow, text = y+1, width = 5, background = "white")
-    label.grid(row=y+1, column=0)
-
-
-for x in xAxis:
-    label = Label(mainwindow, text = x, width = 15, background = "white")
-    label.grid(row = 0, column = xAxis.index(x) + 1, sticky = "n")
-
-for y in yAxis:
-    xcoor=0
-    for x in xAxis:
-        id = f"{x}{y}"
-        var = StringVar(mainwindow, "" ,id)
-        entryCell = Entry(mainwindow, textvariable=var, width=18)
-        entryCell.grid(row=y+1, column=xcoor+1)
-        cells[id] = var
-        xcoor+=1
-
-def rowAdd():
-    setting+=1
-    return
-
-def saveApp():
-    try:
-        f = open("savefile.txt", "x")
-    except:
-        print("file already made")
-    else:
-        print("file created")
-        
-    with open("savefile.txt", "a") as f:
-        for key, value in cells.items():
-            f.write(f"{key} : {value.get()}\n")
-    return
-
-submitButton = Button(mainwindow, text="Add Row", command = rowAdd)
-submitButton.grid(column=1, row = setting+2)
-
-saveButton = Button(mainwindow, text="Save", command = saveApp)
-saveButton.grid(column=2, row = setting+2)
-
-
-'''
-
-
 
