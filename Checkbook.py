@@ -4,6 +4,9 @@ from tkinter import filedialog
 import os
 import string, csv
 
+globaldata = [("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory")]
+
+
 class Checkbook_Window(tk.Tk):
     def __init__(self, title):
         # setup
@@ -14,29 +17,29 @@ class Checkbook_Window(tk.Tk):
         self.maxsize(900,450)
         
         # Temp Values
-        data = [("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory")]
-
+        global globaldata 
         # widgets
-        self.menu = Core_Window(self, data)
-        self.check = ListFrame(self, data , 25)
+        self.menu = Core_Window(self)
+        self.check = ListFrame(self, 25)   
 
         # run
         self.mainloop()
+
     
 class Core_Window(ttk.Frame):
-    def __init__(self, parent, data):
+    def __init__(self, parent):
         super().__init__(parent)
         self.place(x=0, y=0, relwidth=1, relheight=0.3)
-        self.create_widgets(data)
+        self.create_widgets()
 
-    def create_widgets(self, data):
+    def create_widgets(self):
         # Setup information
         xAxis = ["Number", "Flag", "Information", "Date", "Status", "Amount", "Deposit", "Balance"]
         
         # buttons/labels
         FileName = tk.Label(self, text = "input", background = "white" )
-        AddButton = tk.Button(self, text="Add Row", command = self.rowAdd)
-        SaveButton = tk.Button(self, text="Save", command = self.saveApp(data))
+        AddButton = tk.Button(self, text="Add Row", command = lambda : self.rowAdd())
+        SaveButton = tk.Button(self, text="Save", command = lambda : self.saveApp())
 
         # Creates grid
         self.columnconfigure((0,1,2,3,4,5,6,7), weight = 1, uniform = "a")
@@ -49,32 +52,32 @@ class Core_Window(ttk.Frame):
             text.grid(row = 2, column = xAxis.index(x))
         AddButton.grid(column=0, row = 1)
         SaveButton.grid(column=1, row = 1)
+
+    def rowAdd(self):
+        global globaldata
+        globaldata.append(("","","","","","",""))
+        return
     
-    def rowAdd():
-        
+    def saveApp(self):
+        f = open("SaveData\savefile.txt", 'r+')
+        f.truncate(0)
+        f.close()
+        with open("SaveData\savefile.txt", "a") as f:
+            global globaldata
+            for row in globaldata:
+                f.write(f"{row}\n")
+        f.close()
         return
-    def saveApp(self, data):
-        try:
-            f = open("savefile.txt", "x")
-        except:
-            print("file already made")
-        else:
-            print("file created")
-            
-        with open("savefile.txt", "a") as f:
-            f = open("savefile.txt", 'r+')
-            f.truncate(0)
-            for series in data:
-                f.write(f"{series}\n")
-        return
+    
 
 class ListFrame(ttk.Frame):
-    def __init__(self, parent, text_data, item_height):
+    def __init__(self, parent, item_height):
         super().__init__(master = parent)
         self.place(x=0, y=90, relwidth=1, relheight=0.78)
+        global globaldata
 
-        self.text_data = text_data
-        self.item_number = len(text_data)
+        self.text_data = globaldata
+        self.item_number = len(globaldata)
         self.list_height = self.item_number * item_height
 
         self.canvas = tk.Canvas(self, background = "white", scrollregion = (0,0,900,self.list_height))
@@ -82,7 +85,7 @@ class ListFrame(ttk.Frame):
 
         # display frame
         self.frame = ttk.Frame(self)
-        for index, item in enumerate(self.text_data):
+        for index, item in enumerate(globaldata):
             self.create_item(index, item).pack(expand = True, fill = 'both', pady = 1, padx=5)
 
         # scrollbar
@@ -94,6 +97,7 @@ class ListFrame(ttk.Frame):
         #events
         self.canvas.bind_all('<MouseWheel>', lambda event: self.canvas.yview_scroll(-int(event.delta / 60),"units"))
         self.bind('<Configure>', self.update_size)
+
 
 
     def update_size(self, event):
@@ -122,6 +126,7 @@ class ListFrame(ttk.Frame):
             z+=1
 
         return frame
+
 
         
 
