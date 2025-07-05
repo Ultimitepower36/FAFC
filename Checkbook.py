@@ -4,26 +4,34 @@ from tkinter import filedialog
 import os
 import string, csv
 
-globaldata = [("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory"),("Megan","Sorro"), ("Charlie", "Gregory")]
-
+globaldata = []
 
 class Checkbook_Window(tk.Tk):
-    def __init__(self, title):
+    def __init__(self, file, password, file_dir):
         # setup
         super().__init__()
-        self.title(title)
+        self.title(f"FAFC {file}")
         self.geometry("900x450")
         self.minsize(900,450)
         self.maxsize(900,450)
         
         # Temp Values
         global globaldata 
+        self.file_access(file_dir, file, password)
+
         # widgets
         self.menu = Core_Window(self)
         self.check = ListFrame(self, 25)   
 
         # run
         self.mainloop()
+
+    def file_access(filepath, file, password):
+        with open(f"{filepath}\{file}", "a") as f:
+            global globaldata
+            for line in f:
+                globaldata.append(line)
+            f.close()
 
     
 class Core_Window(ttk.Frame):
@@ -129,7 +137,6 @@ class ListFrame(ttk.Frame):
 
 
         
-
-title = "F.A.F.C"
-Checkbook_Window(title)
+if __name__=="__main__":
+    Checkbook_Window()
 

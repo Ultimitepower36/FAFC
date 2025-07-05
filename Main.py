@@ -3,6 +3,10 @@ from tkinter import ttk
 from tkinter import filedialog
 import os
 
+import Password
+import SaveCreation
+import Checkbook
+
 class Opening_Window(tk.Tk):
     def __init__(self):
         # main setup
@@ -25,7 +29,7 @@ class Menu(ttk.Frame):
         self.open_button = tk.Button(self, text="Open Folder", font=("Times New Roman", 10), command=self.open_folder_dialog)
         self.listbox = tk.Listbox(self, width=50)
         self.submit_button = tk.Button(self, text="Open Checkbook", font=("Times New Roman",10), command=self.listboxSelection)
-        self.NewFile_button = tk.Button(self, text="Make New Checkbook", font=("Times New Roman",10))
+        self.NewFile_button = tk.Button(self, text="Make New Checkbook", font=("Times New Roman",10), command=self.openBox_SaveCreation)
         
         # Creates grid
         self.columnconfigure((0,1,2,3), weight = 1, uniform = "a")
@@ -39,9 +43,9 @@ class Menu(ttk.Frame):
     
     def open_folder_dialog(self):
         # Gets the file path for the save states
-        folder_path = filedialog.askdirectory(title="Select a Folder")
-        if folder_path:
-            self.display_folder_contents(folder_path)
+        self.folder_path = filedialog.askdirectory(title="Select a Folder")
+        if self.folder_path:
+            self.display_folder_contents(self.folder_path)
 
     def display_folder_contents(self, folder_path):
         # Checks the files in the path and displays them
@@ -56,19 +60,25 @@ class Menu(ttk.Frame):
             self.listbox.delete(0, tk.END)  # Clear the current list
             self.listbox.insert(tk.END, f"Error: {str(e)}")
 
-    def openBox_Password(self, picked):
-        password_window = tk.Toplevel()
 
-    def listboxSelection(self, event):
+    def openBox_SaveCreation(self):
+        var = 2
+
+    def listboxSelection(self):
         # Allows for a file to be selected and moved to the next part
-        widget = event.widget
+        widget = self.listbox
         selection=widget.curselection()
         picked = widget.get(selection[0])
         
-        #Open Checkbook with selected file here
-        self.openBox_Password(self, picked)
-
+        t = Password.Password_Entry()
+        sub_password = t.Go(picked)
     
-# starts program
-Opening_Window()
+        Checkbook.Checkbook_Window(picked, sub_password, self.folder_path)
+        #Open Checkbook with selected file here
+        #self.openBox_Password(self, picked)
+
+
+if __name__=="__main__":
+    # starts program
+    Opening_Window()
     

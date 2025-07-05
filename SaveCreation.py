@@ -41,4 +41,5 @@ class Menu(ttk.Frame):
         PasswordEntry.grid(row=1, column=3, columnspan=3)
         SubmitButton.grid(row=2, column=0, columnspan=5)
 
-Account_Creation()
+if __name__=="__main__":
+    Account_Creation()
