@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
+import json
 import os
 import string, csv
 
@@ -20,34 +21,34 @@ class Checkbook_Window(tk.Tk):
         self.file_access(file_dir, file, password)
 
         # widgets
-        self.menu = Core_Window(self)
+        self.menu = Core_Window(self, file_dir, file, password)
         self.check = ListFrame(self, 25)   
 
         # run
         self.mainloop()
 
-    def file_access(filepath, file, password):
-        with open(f"{filepath}\{file}", "a") as f:
+    def file_access(self, filepath, file, password):
+        with open(f"{filepath}\{file}", "r") as f:
             global globaldata
             for line in f:
-                globaldata.append(line)
+                globaldata.append(json.loads(line))
             f.close()
 
     
 class Core_Window(ttk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, filepath, file, password):
         super().__init__(parent)
         self.place(x=0, y=0, relwidth=1, relheight=0.3)
-        self.create_widgets()
+        self.create_widgets(filepath, file, password)
 
-    def create_widgets(self):
+    def create_widgets(self, filepath, file, password):
         # Setup information
         xAxis = ["Number", "Flag", "Information", "Date", "Status", "Amount", "Deposit", "Balance"]
         
         # buttons/labels
         FileName = tk.Label(self, text = "input", background = "white" )
         AddButton = tk.Button(self, text="Add Row", command = lambda : self.rowAdd())
-        SaveButton = tk.Button(self, text="Save", command = lambda : self.saveApp())
+        SaveButton = tk.Button(self, text="Save", command = lambda : self.saveApp(filepath, file, password))
 
         # Creates grid
         self.columnconfigure((0,1,2,3,4,5,6,7), weight = 1, uniform = "a")
@@ -63,14 +64,14 @@ class Core_Window(ttk.Frame):
 
     def rowAdd(self):
         global globaldata
-        globaldata.append(("","","","","","",""))
+        globaldata.append(["", "", "", "", "", "", ""])
         return
     
-    def saveApp(self):
-        f = open("SaveData\savefile.txt", 'r+')
+    def saveApp(self, filepath, file, password):
+        f = open(f"{filepath}\{file}", 'r+')
         f.truncate(0)
         f.close()
-        with open("SaveData\savefile.txt", "a") as f:
+        with open(f"{filepath}\{file}", "a") as f:
             global globaldata
             for row in globaldata:
                 f.write(f"{row}\n")
@@ -123,14 +124,15 @@ class ListFrame(ttk.Frame):
 
         # Grid layout
         frame.rowconfigure(0, weight = 1)
-        frame.columnconfigure((0,1,2,3,4,5,6,7), weight = 1, uniform='a')
+        frame.columnconfigure((0,1,2,3,4,5,6,7), weight = 1, uniform='a', )
 
         #widgets
-        tk.Label(frame, text = f'{index}', width=111, background = "white").grid(row=0, column=0)
+        tk.Label(frame, text = f'{index}', width=14, background = "white").grid(row=0, column=0)
         z=1
+
         for entry in item:
             var = tk.StringVar(value=entry)
-            tk.Entry(frame, textvariable=var, width=111, background = "white").grid(row=0, column=z)
+            tk.Entry(frame, textvariable=var, width=18, background = "white").grid(row=0, column=z)
             z+=1
 
         return frame

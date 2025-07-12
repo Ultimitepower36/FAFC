@@ -62,7 +62,15 @@ class Menu(ttk.Frame):
 
 
     def openBox_SaveCreation(self):
-        var = 2
+        widget = self.listbox
+        selection=widget.curselection()
+        picked = widget.get(selection[0])
+        
+        t = SaveCreation.Menu()
+        sub_password = t.Go(picked)
+        
+        Checkbook.Checkbook_Window(picked, sub_password, self.folder_path)
+
 
     def listboxSelection(self):
         # Allows for a file to be selected and moved to the next part

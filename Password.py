@@ -13,6 +13,7 @@ class Password_Entry(tk.Tk):
         # widgets
         self.menu = Menu(self, picked)
         self.mainloop()
+        self.destroy()
         return self.menu.typed_password
 
 class Menu(ttk.Frame):
@@ -43,7 +44,8 @@ class Menu(ttk.Frame):
 
     def submit_click(self):
         self.typed_password = self.PasswordEntry.get()
-        Password_Entry.destroy
+        self.quit()
+        self.destroy()
 
 if __name__=="__main__":
     Password_Entry().Go()
