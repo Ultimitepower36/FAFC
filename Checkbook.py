@@ -33,11 +33,16 @@ class Checkbook_Window(tk.Tk):
             for line in f:
                 globaldata.append(json.loads(line))
             f.close()
+    
+    def add_ui_row(self, index, item):
+        self.check.create_item(index, item).pack(expand = True, fill = 'both', pady = 1, padx=5)
+        self.check.update_size(None)
 
     
 class Core_Window(ttk.Frame):
     def __init__(self, parent, filepath, file, password):
         super().__init__(parent)
+        self.parent = parent
         self.place(x=0, y=0, relwidth=1, relheight=0.3)
         self.create_widgets(filepath, file, password)
 
@@ -64,7 +69,9 @@ class Core_Window(ttk.Frame):
 
     def rowAdd(self):
         global globaldata
-        globaldata.append(["", "", "", "", "", "", ""])
+        newRow = ["", "", "", "", "", "", ""]
+        globaldata.append(newRow)
+        self.parent.add_ui_row((len(globaldata)-1), newRow)
         return
     
     def saveApp(self, filepath, file, password):
@@ -74,7 +81,7 @@ class Core_Window(ttk.Frame):
         with open(f"{filepath}\{file}", "a") as f:
             global globaldata
             for row in globaldata:
-                f.write(f"{row}\n")
+                f.write(f"{json.dumps(row)}\n")
         f.close()
         return
     
