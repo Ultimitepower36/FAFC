@@ -62,7 +62,7 @@ class Menu(ttk.Frame):
 
 
     def openBox_SaveCreation(self):
-        t = SaveCreation.Menu().Go()
+        t = SaveCreation.Account_Creation().Go()
         picked = t[0]
         sub_password = t[1]
         self.folder_path = "SaveData"

@@ -4,9 +4,8 @@ import os
 
 #This section of python creates the login menu.
 class Account_Creation(tk.Tk):
-    def Go(self, picked):
+    def Go(self):
         # main setup
-        super().__init__()
         self.title("F.A.F.C.")
         self.geometry("400x100")
         self.minsize(400,100)
