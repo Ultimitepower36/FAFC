@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+import json
 import os
 
 #This section of python creates the login menu.
@@ -46,6 +47,12 @@ class Menu(ttk.Frame):
     def submit_click(self):
         self.FileName = self.TitleEntry.get()
         self.Password = self.PasswordEntry.get()
+        f = open(f"SaveData\{self.FileName}.txt", 'r+')
+        for x in range(0,10):
+            row = ["", "", "", "", "", "", ""]
+            f.write(f"{json.dumps(row)}\n")
+        f.close()
+
         self.quit()
         self.destroy()
 
