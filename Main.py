@@ -62,13 +62,10 @@ class Menu(ttk.Frame):
 
 
     def openBox_SaveCreation(self):
-        widget = self.listbox
-        selection=widget.curselection()
-        picked = widget.get(selection[0])
-        
-        t = SaveCreation.Menu()
-        sub_password = t.Go(picked)
-        
+        t = SaveCreation.Menu().Go()
+        picked = t[0]
+        sub_password = t[1]
+        self.folder_path = "SaveData"
         Checkbook.Checkbook_Window(picked, sub_password, self.folder_path)
 
 
