@@ -28,7 +28,7 @@ class Checkbook_Window(tk.Tk):
         self.mainloop()
 
     def file_access(self, filepath, file, password):
-        with open(f"{filepath}\{file}", "r") as f:
+        with open(f"{filepath}\{file}.txt", "r") as f:
             global globaldata
             for line in f:
                 globaldata.append(json.loads(line))

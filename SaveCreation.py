@@ -47,8 +47,8 @@ class Menu(ttk.Frame):
     def submit_click(self):
         self.FileName = self.TitleEntry.get()
         self.Password = self.PasswordEntry.get()
-        f = open(f"SaveData\{self.FileName}.txt", 'r+')
-        for x in range(0,10):
+        f = open(f"SaveData\{self.FileName}.txt", 'x')
+        for x in range(0,20):
             row = ["", "", "", "", "", "", ""]
             f.write(f"{json.dumps(row)}\n")
         f.close()
