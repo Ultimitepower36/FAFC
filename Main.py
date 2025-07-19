@@ -66,7 +66,7 @@ class Menu(ttk.Frame):
         picked = t[0]
         sub_password = t[1]
         self.folder_path = "SaveData"
-        Checkbook.Checkbook_Window(picked, sub_password, self.folder_path)
+        Checkbook.Checkbook_Window(picked+".txt", sub_password, self.folder_path)
 
 
     def listboxSelection(self):

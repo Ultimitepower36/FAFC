@@ -4,8 +4,10 @@ from tkinter import filedialog
 import json
 import os
 import string, csv
+import Crypto
 
 globaldata = []
+globalentry = []
 
 class Checkbook_Window(tk.Tk):
     def __init__(self, file, password, file_dir):
@@ -28,11 +30,10 @@ class Checkbook_Window(tk.Tk):
         self.mainloop()
 
     def file_access(self, filepath, file, password):
-        with open(f"{filepath}\{file}.txt", "r") as f:
-            global globaldata
-            for line in f:
-                globaldata.append(json.loads(line))
-            f.close()
+        #decrypt
+        global globaldata
+        globaldata = Crypto.decrypt(password, f"{filepath}\{file}")
+
     
     def add_ui_row(self, index, item):
         self.check.create_item(index, item).pack(expand = True, fill = 'both', pady = 1, padx=5)
@@ -75,14 +76,19 @@ class Core_Window(ttk.Frame):
         return
     
     def saveApp(self, filepath, file, password):
-        f = open(f"{filepath}\{file}", 'r+')
-        f.truncate(0)
-        f.close()
-        with open(f"{filepath}\{file}", "a") as f:
-            global globaldata
-            for row in globaldata:
-                f.write(f"{json.dumps(row)}\n")
-        f.close()
+        global globalentry
+        counter = 0
+        tempdata = []
+        templist = []
+
+        for x in globalentry:
+            templist.append(x.get())
+            counter +=1
+            if counter == 7:
+                tempdata.append(templist)
+                templist =[]
+                counter = 0
+        Crypto.encrypt(tempdata, password, f"{filepath}\{file}")
         return
     
 
@@ -136,10 +142,13 @@ class ListFrame(ttk.Frame):
         #widgets
         tk.Label(frame, text = f'{index}', width=14, background = "white").grid(row=0, column=0)
         z=1
+        global globalentry
 
         for entry in item:
-            var = tk.StringVar(value=entry)
-            tk.Entry(frame, textvariable=var, width=18, background = "white").grid(row=0, column=z)
+            tempEntry = tk.Entry(frame,  width=18, background = "white")
+            tempEntry.insert(0,entry)
+            tempEntry.grid(row=0, column=z)
+            globalentry.append(tempEntry)
             z+=1
 
         return frame

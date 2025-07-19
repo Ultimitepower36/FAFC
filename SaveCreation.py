@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import json
 import os
+import Crypto
 
 #This section of python creates the login menu.
 class Account_Creation(tk.Tk):
@@ -47,11 +48,16 @@ class Menu(ttk.Frame):
     def submit_click(self):
         self.FileName = self.TitleEntry.get()
         self.Password = self.PasswordEntry.get()
-        f = open(f"SaveData\{self.FileName}.txt", 'x')
+
+
+        file = f"SaveData\{self.FileName}.txt"
+        tempdata = []
         for x in range(0,20):
             row = ["", "", "", "", "", "", ""]
-            f.write(f"{json.dumps(row)}\n")
-        f.close()
+            tempdata.append(row)
+            #f.write(f"{json.dumps(row)}\n")
+        
+        Crypto.encrypt(tempdata, self.Password, file)
 
         self.quit()
         self.destroy()
